@@ -14,7 +14,7 @@ from nav_msgs.msg import Odometry
 from rclpy.time import Time
 
 # You may add any other imports you may need/want to use below
-# import ...
+from rclpy.time import Time
 
 
 CIRCLE=0; SPIRAL=1; ACC_LINE=2
@@ -57,7 +57,10 @@ class motion_executioner(Node):
         self.create_subscription(LaserScan, "/scan", self.laser_callback, qos_profile=qos)
         
         self.create_timer(0.1, self.timer_callback)
-
+        
+        # Twist Parameters
+        self.lin_vel = 0
+        self.ang_vel = 0
 
     # TODO Part 5: Callback functions: complete the callback functions of the three sensors to log the proper data.
     # To also log the time you need to use the rclpy Time class, each ros msg will come with a header, and then
@@ -66,15 +69,39 @@ class motion_executioner(Node):
     # You can save the needed fields into a list, and pass the list to the log_values function in utilities.py
 
     def imu_callback(self, imu_msg: Imu):
-        ...    # log imu msgs
+        # log imu msgs
+        # CHECK WITH TA...
+        timestamp = Time.from_msg(imu_msg.header.stamp).nanoseconds
+        imu_orientation = imu_msg.orientation
+        imu_ang_vel = imu_msg.angular_velocity
+        imu_lin_accel = imu_msg.linear_acceleration
+        self.imu_logger.log_values([timestamp, imu_orientation, imu_ang_vel, imu_lin_accel])
         
     def odom_callback(self, odom_msg: Odometry):
-        
-        ... # log odom msgs
+        # log odom msgs
+        timestamp = Time.from_msg(odom_msg.header.stamp).nanoseconds
+        odom_orientation = odom_msg.pose.pose.orientation
+        odom_x_pos = odom_msg.pose.pose.position.x
+        odom_y_pos = odom_msg.pose.pose.position.y
+        self.odom_logger.log_values([timestamp, odom_orientation, odom_x_pos, odom_y_pos])
                 
     def laser_callback(self, laser_msg: LaserScan):
+        # log laser msgs with position msg at that time
+        timestamp = Time.from_msg(laser_msg.header.stamp).nanoseconds
+        angle_min = laser_msg.angle_min
+        angle_max = laser_msg.angle_max
+        angle_increment = laser_msg.angle_increment
+        time_increment = laser_msg.time_increment
+        scan_time = laser_msg.scan_time
+        range_min = laser_msg.range_min
+        range_max = laser_msg.range_max
         
-        ... # log laser msgs with position msg at that time
+        # Do we need any of the above data? Do we just need the ranges data?
+        ranges = laser_msg.ranges
+        
+        # Does our lidar provide intensity data?
+        intensities = laser_msg.intensities
+        self.laser_logger.log_values([timestamp, angle_min, angle_max, angle_increment, time_increment, scan_time, range_min, range_max, ranges, intensities])
                 
     def timer_callback(self):
         
@@ -107,17 +134,31 @@ class motion_executioner(Node):
     def make_circular_twist(self):
         
         msg=Twist()
-        ... # fill up the twist msg for circular motion
+        # fill up the twist msg for circular motion
+        
+        # Tweak these values
+        self.lin_vel = 1
+        self.ang_vel = 1
+        msg.linear.x = self.lin_vel
+        msg.angular.z = self.ang_vel
         return msg
 
     def make_spiral_twist(self):
         msg=Twist()
-        ... # fill up the twist msg for spiral motion
+        # fill up the twist msg for spiral motion
+        self.lin_vel += 0.1
+        self.ang_vel = 1
+        msg.linear.x = self.lin_vel
+        msg.angular.z = self.ang_vel
         return msg
     
     def make_acc_line_twist(self):
         msg=Twist()
-        ... # fill up the twist msg for line motion
+        # fill up the twist msg for line motion
+        self.lin_vel = 1
+        self.ang_vel = 0
+        msg.linear.x = self.lin_vel
+        msg.angular.z = self.ang_vel
         return msg
 
 import argparse
