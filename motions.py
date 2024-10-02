@@ -137,7 +137,7 @@ class motion_executioner(Node):
         
         # Complete a spiral motion by gradually increasing the linear velocity
         # sent to the robot while maintaining constant angular velocity
-        self.lin_vel += 0.1
+        self.lin_vel += 0.01
         self.ang_vel = 1
         msg.linear.x = self.lin_vel
         msg.angular.z = self.ang_vel
