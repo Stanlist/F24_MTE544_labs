@@ -24,7 +24,7 @@ class Logger:
             vals_str=""
 
             for value in values_list:
-                vals_str+=value
+                vals_str+=str(value)
                 vals_str+=", "
             
             vals_str+="\n"
