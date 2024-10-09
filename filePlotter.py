@@ -5,9 +5,14 @@
 import matplotlib.pyplot as plt
 from utilities import FileReader
 
-def plot_errors(filename):
+def plot_errors(filename: str):
     
-    headers, values=FileReader(filename).read_file() 
+    headers, values=FileReader(filename).read_file()
+    filename_list = filename.split('_')
+    print(filename_list)
+    sensor = filename_list[0]
+    filename_list[-1] = filename_list[-1].split('.')[0]
+    movement = filename_list[-1]
     time_list=[]
     first_stamp=values[0][-1]
     
@@ -18,6 +23,9 @@ def plot_errors(filename):
         plt.plot(time_list, [lin[i] for lin in values], label= headers[i]+ " linear")
     
     #plt.plot([lin[0] for lin in values], [lin[1] for lin in values])
+    plt.title(f"{sensor} measurements for {movement} movement")
+    plt.xlabel("Timestamp (ns)")
+    plt.ylabel("X, Y Acceleration (m/s^2) & Th Anglular Velocity (rad/s)")
     plt.legend()
     plt.grid()
     plt.show()

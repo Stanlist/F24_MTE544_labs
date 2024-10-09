@@ -69,11 +69,25 @@ class FileReader:
                 values = line.strip().split(',')
                 
                 row=[]                
+                array=[]
+                is_arr_element = False
                 
                 for val in values:
                     if val=='':
                         break
-                    row.append(float(val.strip()))
+                    if val.startswith("["):
+                        is_arr_element = True
+                        val = val[1:] # Remove open bracket
+                    if val.endswith("]"):
+                        is_arr_element = False
+                        val = val[:-1]
+                        array.append(float(val.strip()))
+                        row.append(array)
+                        continue
+                    if is_arr_element:
+                        array.append(float(val.strip()))
+                    else:
+                        row.append(float(val.strip()))
 
                 table.append(row)
         
