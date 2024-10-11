@@ -123,7 +123,6 @@ class motion_executioner(Node):
         
         msg=Twist()
         
-        # Tweak these values; what range of velocity is appropriate?
         self.lin_vel = 1.0
         self.ang_vel = 6.0
         msg.linear.x = self.lin_vel

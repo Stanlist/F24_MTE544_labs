@@ -15,17 +15,28 @@ def plot_errors(filename: str):
     movement = filename_list[-1]
     time_list=[]
     first_stamp=values[0][-1]
-    
+
+    # X and Y lists used for graphing Odometry X vs. Y graph 
+    # x_list = []
+    # y_list = []
     for val in values:
         time_list.append(val[-1] - first_stamp)
+        # x_list.append(val[0])
+        # y_list.append(val[1])
 
     for i in range(0, len(headers) - 1):
         plt.plot(time_list, [lin[i] for lin in values], label= headers[i]+ " linear")
     
-    #plt.plot([lin[0] for lin in values], [lin[1] for lin in values])
+    # Plotting x to y for odom
+    # plt.plot(x_list, y_list)
+    
+    plt.plot([lin[0] for lin in values], [lin[1] for lin in values])
     plt.title(f"{sensor} measurements for {movement} movement")
+    # plt.title(f"Odometry X-Y Positional Data")
     plt.xlabel("Timestamp (ns)")
+    # plt.xlabel("X Location")
     plt.ylabel("X, Y Acceleration (m/s^2) & Th Anglular Velocity (rad/s)")
+    # plt.ylabel("Y location")
     plt.legend()
     plt.grid()
     plt.show()
