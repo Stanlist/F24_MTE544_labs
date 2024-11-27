@@ -46,6 +46,10 @@ def return_path(current_node, maze):
 
     return path
 
+def heuristic(current, end):
+    # Uncomment heuristic strategy to be used
+    return abs(current[0] - end[0]) + abs(current[1] - end[1])          # Manhattan
+    # return sqrt((current[0] - end[0])**2 + (current[1] - end[1])**2)    # Euclidean
 
 def search(maze, start, end):
 
@@ -64,15 +68,16 @@ def search(maze, start, end):
 
     # TODO PART 4 Create start and end node with initized values for g, h and f
     # Use None as parent if not defined
-    start_node = Node(...)
-    start_node.g = ...     # cost from start Node
-    start_node.h = ...     # heuristic estimated cost to end Node
-    start_node.f = ...
 
-    end_node = Node(...)
-    end_node.g = ...       # set a large value if not defined
-    end_node.h = ...       # heuristic estimated cost to end Node
-    end_node.f = ...
+    start_node = Node(None)
+    start_node.g = 0                        # cost from start Node
+    start_node.h = heuristic(start, end)    # heuristic estimated cost to end Node
+    start_node.f = start_node.g + start_node.h
+
+    end_node = Node(None)
+    end_node.g = 999999                     # set a large value if not defined
+    end_node.h = 0                          # heuristic estimated cost to end Node
+    end_node.f = end_node.g + end_node.h
 
     # Initialize both yet_to_visit and visited dictionary
     # in this dict we will put all node that are yet_to_visit for exploration.
@@ -92,14 +97,14 @@ def search(maze, start, end):
 
     # TODO PART 4 what squares do we search . serarch movement is left-right-top-bottom
     # (4 or 8 movements) from every positon
-    move = [[...],  # go up
-            [...],  # go left
-            [...],  # go down
-            [...],  # go right
-            [...],  # go up left
-            [...],  # go down left
-            [...],  # go up right
-            [...]]  # go down right
+    move = [[0, 0.1],  # go up
+            [-0.1, 0],  # go left
+            [0, -0.1],  # go down
+            [0.1, 0],  # go right
+            [-0.1, 0.1],  # go up left
+            [-0.1, -0.1],  # go down left
+            [0.1, 0.1],  # go up right
+            [0.1, -0.1]]  # go down right
 
     """
         1) We first get the current node by comparing all f cost and selecting the lowest cost node for further expansion
