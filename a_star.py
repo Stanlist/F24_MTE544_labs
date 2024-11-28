@@ -69,12 +69,12 @@ def search(maze, start, end):
     # TODO PART 4 Create start and end node with initized values for g, h and f
     # Use None as parent if not defined
 
-    start_node = Node(None)
+    start_node = Node(parent=None, position=start)
     start_node.g = 0                        # cost from start Node
     start_node.h = heuristic(start, end)    # heuristic estimated cost to end Node
     start_node.f = start_node.g + start_node.h
 
-    end_node = Node(None)
+    end_node = Node(parent=None, position=end)
     end_node.g = 999999                     # set a large value if not defined
     end_node.h = 0                          # heuristic estimated cost to end Node
     end_node.f = end_node.g + end_node.h
@@ -165,7 +165,7 @@ def search(maze, start, end):
             node_position = (new_position[0] + current_node.position[0], new_position[1] + current_node.position[1])
 
             # TODO PART 4 Make sure within range (check if within maze boundary)
-            if (node_position[0] < (no_rows - 1) or node_position[0] < 0 or node_position[1] > (no_columns - 1) or node_position[1] < 0):
+            if (node_position[0] >= no_rows or node_position[0] < 0 or node_position[1] >= no_columns or node_position[1] < 0):
                 continue
 
             # Make sure walkable terrain
@@ -187,6 +187,7 @@ def search(maze, start, end):
                 continue
 
             # TODO PART 4 Create the f, g, and h values
+            # Maybe instead of a blanket cost of 1, we use the euclidean distance instead to account for the diagonal tiles
             child.g = current_node.g + 1
             # Heuristic costs calculated here, this is using eucledian distance
             child.h = heuristic(child.position, end_node.position)

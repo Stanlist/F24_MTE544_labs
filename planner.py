@@ -32,7 +32,7 @@ class planner:
         # the standard deviation for the gausiian for which
         # the mean is located on the occupant grid. 
         # PROBABILY WANT TO TUNE THIS STANDARD DEVIATION
-        self.m_utilites=mapManipulator(laser_sig=0.01) 
+        self.m_utilites=mapManipulator(laser_sig=.4) 
             
         self.costMap=self.m_utilites.make_likelihood_field()
         
