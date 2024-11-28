@@ -57,7 +57,7 @@ class decision_maker(Node):
         
         elif motion_type==TRAJECTORY_PLANNER:
             # TODO PART 5 Bonus Put the gains that you conclude from lab 2
-            self.controller=trajectoryController(...)      
+            self.controller=trajectoryController(klp=0.2, klv=0.5, kap=0.8, kav=0.6)      
             self.planner=planner(TRAJECTORY_PLANNER)
         
         else:

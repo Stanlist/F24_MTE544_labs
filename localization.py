@@ -73,9 +73,9 @@ class localization(Node):
             
             # TODO PART 5 Bonus put the Q and R matrices
             # that you conclude from lab Three
-            Q=...
-            R=...
-            P=...
+            Q= np.eye(6,6) * 0.2
+            R= np.eye(4,4) * 0.5
+            P= np.eye(6,6) * 0.5 # initial covariance
                         
             self.kf=kalman_filter(P,Q,R, x)
             
