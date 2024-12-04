@@ -189,7 +189,7 @@ def search(maze, start, end):
             # TODO PART 4 Create the f, g, and h values
             # Maybe instead of a blanket cost of 1, we use the euclidean distance instead to account for the diagonal tiles
             child.g = current_node.g + 1
-            # Heuristic costs calculated here, this is using eucledian distance
+            # Heuristic costs calculated here
             child.h = heuristic(child.position, end_node.position)
 
             child.f = child.g + child.h
